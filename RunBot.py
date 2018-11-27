@@ -5,7 +5,7 @@ import steam
 import asyncio
 import urllib.parse as urlp
 
-from aiogram import Bot, Dispatcher, executor, types
+fromaiogram import Bot, Dispatcher, executor, types
 
 API_TOKEN = '767495499:AAGrz2fKUaMgfGHQ7l2eXVut8JYHYEUOnvg'
 
@@ -70,7 +70,7 @@ async def title_search(message: types.Message):
 
 @dp.message_handler()
 async def echo(message: types.Message):
-    await bot.send_message(message.chat.id, "<b>Me no speak amerikano </b>", parse_mode='HTML')
+    await bot.send_message(message.chat.id, "<b>Me no speak amerikano, try using commands </b>", parse_mode='HTML')
 
 
 if __name__ == '__main__':
