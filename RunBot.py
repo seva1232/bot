@@ -1,0 +1,77 @@
+import logging
+import StopGame
+import MetaScore
+import steam
+import asyncio
+import urllib.parse as urlp
+
+from aiogram import Bot, Dispatcher, executor, types
+
+API_TOKEN = '767495499:AAGrz2fKUaMgfGHQ7l2eXVut8JYHYEUOnvg'
+
+logging.basicConfig(level=logging.INFO)
+bot = Bot(token=API_TOKEN)
+dp = Dispatcher(bot)
+steam_lib = dict()
+
+
+@dp.message_handler(commands=['refresh'])
+async def steam_app_lib_getter(message: types.Message):
+    if message.from_user.id != 196832767:
+        await bot.send_message(message.chat.id, 'Nope, you are not allowed here')
+        return
+    else:
+        global steam_lib
+        steam_lib = await steam.get_steam_lib()
+        await asyncio.sleep(3600)
+        await steam_app_lib_getter(message)
+
+
+def format_rating_answer(sg, mg):
+    dictionary = {key: value for [key, value] in sg}
+    result = list()
+    for [key, value] in mg:
+        result.append([key, str(value) + " <i> MScore</i>" + StopGame.formater_of_sg(dictionary, key)])
+    formated = ["<b>{}</b> — {}".format(item[0], item[1]) for item in result]
+    return '\n'.join(formated)
+
+
+@dp.message_handler(commands=['start', 'help'])
+async def send_welcome(message: types.Message):
+    await message.reply("""
+    Hello!
+    I'm would gladly help you to get some ideas about your's gaming experience
+    
+    <i>commands</i>: /s to search game, it's description and ratings.
+    <i>example</i>: /s Divinity
+    """, parse_mode='HTML')
+
+
+@dp.message_handler(commands=['s'])
+async def title_search(message: types.Message):
+    question = message.text[(len("/s")):]
+    try:
+        sgans = await StopGame.stop_game(question)
+        mgans = await MetaScore.metacritic(question)
+        image_web = mgans.pop()
+        descr = mgans.pop()
+        answer = format_rating_answer(sgans, mgans)
+        await bot.send_message(message.chat.id, "<b>" + str(mgans[0][0]) + "</b> " + descr, parse_mode='HTML')
+        await bot.send_message(message.chat.id, image_web, parse_mode='HTML')
+        await bot.send_message(message.chat.id, 'These may also interest you!', parse_mode='HTML')
+        await bot.send_message(message.chat.id, answer, parse_mode='HTML')
+        if steam_lib.get(mgans[0][0]) is not None:
+            await bot.send_message(message.chat.id,
+                                   'https://store.steampowered.com/app/{}'.format(
+                                       urlp.quote_plus(str(steam_lib.get(mgans[0][0])))))
+    except IndexError:
+        await bot.send_message(message.chat.id, 'Nothing found', parse_mode='HTML')
+
+
+@dp.message_handler()
+async def echo(message: types.Message):
+    await bot.send_message(message.chat.id, "<b>Me no speak amerikano </b>", parse_mode='HTML')
+
+
+if __name__ == '__main__':
+    executor.start_polling(dp, skip_updates=True)
