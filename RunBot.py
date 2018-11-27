@@ -5,7 +5,7 @@ import steam
 import asyncio
 import urllib.parse as urlp
 
-fromaiogram import Bot, Dispatcher, executor, types
+from aiogram import Bot, Dispatcher, executor, types
 
 API_TOKEN = '767495499:AAGrz2fKUaMgfGHQ7l2eXVut8JYHYEUOnvg'
 
