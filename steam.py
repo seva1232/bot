@@ -1,6 +1,7 @@
 import aiohttp
 import json
 
+# Hello, world.
 
 async def get_steam_lib():
     url_steam_api = 'https://api.steampowered.com/ISteamApps/GetAppList/v2/'
