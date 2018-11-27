@@ -1,5 +1,4 @@
 import requests
-from bs4 import BeautifulSoup
 import pprint
 import re
 from urllib.parse import quote_plus
