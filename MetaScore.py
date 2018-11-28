@@ -47,7 +47,7 @@ def metacritic_parse(req_text):
 # <span class="data textscore textscore_outstanding">9.1</span>
 
 # async def metacritic_top():
-def metacritic_top():
+async def metacritic_top():
     site_texts = list()
     headers = {
         "authority": "www.metacritic.com",
@@ -55,18 +55,18 @@ def metacritic_top():
     }
     url = "https://www.metacritic.com/browse/games/score/metascore/all/pc/filtered"
     for i in range(10):
+            # if i == 0:
+            #     urll = url
+            # else:
+            #     urll = url + '?page=' + str(i)
+            # site_texts.append(requests.get(urll, headers=headers).text)
+        async with aiohttp.ClientSession() as session:
             if i == 0:
                 urll = url
             else:
                 urll = url + '?page=' + str(i)
-            site_texts.append(requests.get(urll, headers=headers).text)
-        # async with aiohttp.ClientSession() as session:
-        #     if i == 0:
-        #         urll = url
-        #     else:
-        #         urll = url + '?page=' + str(i)
-        #     async with session.get(urll, headers=headers) as resp:
-        #         site_texts.append(await resp.text())
+            async with session.get(urll, headers=headers) as resp:
+                site_texts.append(await resp.text())
     titles = list()
     msrating = list()
     ursrating = list()
