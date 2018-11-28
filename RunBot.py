@@ -1,15 +1,16 @@
 import logging
 import StopGame
 import MetaScore
+import API
 import steam
 import asyncio
 import urllib.parse as urlp
 import random
+import os
 
 from aiogram import Bot, Dispatcher, executor, types
 
-# API_TOKEN = '756474454:AAF0EVHO-7teGzSXOD5gbi4I0Y1GBxPYhbQ'
-API_TOKEN = '767495499:AAGrz2fKUaMgfGHQ7l2eXVut8JYHYEUOnvg'
+API_TOKEN = os.environ['API']
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
