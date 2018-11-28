@@ -115,6 +115,4 @@ async def metacritic_search(question):
             return answer
 
 if __name__ ==  "__main__":
-    import pprint
-    pprint.pprint(metacritic_top())
     pass
