@@ -55,7 +55,7 @@ async def title_search(message: types.Message):
     question = message.text[(len("/s")):]
     try:
         sgans = await StopGame.stop_game(question)
-        mgans = await MetaScore.metacritic(question)
+        mgans = await MetaScore.metacritic_search(question)
         image_web = mgans.pop()
         descr = mgans.pop()
         answer = format_rating_answer(sgans, mgans)
