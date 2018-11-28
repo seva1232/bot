@@ -89,13 +89,16 @@ def metacritic_top():
         trashtitles.clear()
     # ms_usr = [first + " " + second for first, second in zip[msrating, ursrating]] # hz
     ursrating = list(map(lambda x: x.split('>')[-1], ursrating))
-    top_games = list(map(list, (titles, msrating, ursrating)))
-    from pprint import pprint
-    pprint(top_games)
-    # return top_games
+    msrating = list(map(lambda x: int(x), msrating))
+    top_games = list(map(list, zip(titles, msrating, ursrating)))
+    def filt(x):
+        if x[-1] != 'tbd':
+            if float(x[-1]) > 7.0:
+                x[-1] = int(float(x[-1])*10)
+                return x
+    top_games = list(filter(filt, top_games))
+    return top_games
 
-
-    # return {"Divinity" : 'top'}
 
 
 async def metacritic_search(question):
@@ -112,5 +115,6 @@ async def metacritic_search(question):
             return answer
 
 if __name__ ==  "__main__":
-    metacritic_top()
+    import pprint
+    pprint.pprint(metacritic_top())
     pass
