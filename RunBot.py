@@ -45,10 +45,16 @@ def format_rating_answer(sg, mg):
 async def send_welcome(message: types.Message):
     await message.reply("""
     Hello!
-    I'm would gladly help you to get some ideas about your's gaming experience
+    I'm would gladly help you to get some ideas about your's gaming
     
-    <i>commands</i>: /s to search game, it's description and ratings.
-    <i>example</i>: /s Divinity
+    <i>commands</i>:
+     
+    /s to search game, it's description and ratings.
+    /r or /random to get random game with high ratings
+    
+    <i>example</i>: 
+    /s Divinity
+    /random
     """, parse_mode='HTML')
 
 
