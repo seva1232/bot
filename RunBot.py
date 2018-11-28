@@ -1,7 +1,6 @@
 import logging
 import StopGame
 import MetaScore
-import API
 import steam
 import asyncio
 import urllib.parse as urlp
