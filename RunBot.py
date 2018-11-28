@@ -8,6 +8,7 @@ import random
 
 from aiogram import Bot, Dispatcher, executor, types
 
+# API_TOKEN = '756474454:AAF0EVHO-7teGzSXOD5gbi4I0Y1GBxPYhbQ'
 API_TOKEN = '767495499:AAGrz2fKUaMgfGHQ7l2eXVut8JYHYEUOnvg'
 
 logging.basicConfig(level=logging.INFO)
@@ -15,6 +16,7 @@ bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 steam_lib = dict()
 metacritic_top = list()
+
 
 @dp.message_handler(commands=['refresh'])
 async def steam_app_lib_getter(message: types.Message):
@@ -26,7 +28,7 @@ async def steam_app_lib_getter(message: types.Message):
         global metacritic_top
         steam_lib = await steam.get_steam_lib()
         metacritic_top = await MetaScore.metacritic_top()
-        await asyncio.sleep(3600*24)
+        await asyncio.sleep(3600 * 24)
         await steam_app_lib_getter(message)
 
 
@@ -72,10 +74,13 @@ async def title_search(message: types.Message):
 
 
 @dp.message_handler(commands=['random', 'rand', 'r'])
-async def rand_game(message :types.Message):
+async def rand_game(message: types.Message):
     choice = random.choice(metacritic_top)
-    answer = "Have you tried {}? Critics rate it {}/100, and gamers rate it {}/100, that's a lot!".format(*choice)
+    answer = "<i>Have you tried </i><b>{}</b><i>? Critics rate it </i><b>{}</b><i>/100," \
+             " and gamers rate it </i><b>{}</b><i>/100, that's a lot!</i>"\
+        .format(*choice)
     await bot.send_message(message.chat.id, answer, parse_mode='HTML')
+
 
 @dp.message_handler()
 async def echo(message: types.Message):
