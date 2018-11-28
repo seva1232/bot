@@ -1,15 +1,16 @@
 import logging
 import StopGame
 import MetaScore
+import API
 import steam
 import asyncio
 import urllib.parse as urlp
 import random
+import os
 
 from aiogram import Bot, Dispatcher, executor, types
 
-# API_TOKEN = '756474454:AAF0EVHO-7teGzSXOD5gbi4I0Y1GBxPYhbQ'
-API_TOKEN = '767495499:AAGrz2fKUaMgfGHQ7l2eXVut8JYHYEUOnvg'
+API_TOKEN = os.environ['API']
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
@@ -45,10 +46,16 @@ def format_rating_answer(sg, mg):
 async def send_welcome(message: types.Message):
     await message.reply("""
     Hello!
-    I'm would gladly help you to get some ideas about your's gaming experience
+    I'm would gladly help you to get some ideas about your's gaming
     
-    <i>commands</i>: /s to search game, it's description and ratings.
-    <i>example</i>: /s Divinity
+    <i>commands</i>:
+     
+    /s to search game, it's description and ratings.
+    /r or /random to get random game with high ratings
+    
+    <i>example</i>: 
+    /s Divinity
+    /random
     """, parse_mode='HTML')
 
 
