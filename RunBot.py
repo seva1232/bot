@@ -4,6 +4,7 @@ import MetaScore
 import steam
 import asyncio
 import urllib.parse as urlp
+import random
 
 from aiogram import Bot, Dispatcher, executor, types
 
@@ -13,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 steam_lib = dict()
-
+metacritic_top = list()
 
 @dp.message_handler(commands=['refresh'])
 async def steam_app_lib_getter(message: types.Message):
@@ -22,8 +23,10 @@ async def steam_app_lib_getter(message: types.Message):
         return
     else:
         global steam_lib
+        global metacritic_top
         steam_lib = await steam.get_steam_lib()
-        await asyncio.sleep(3600)
+        metacritic_top = await MetaScore.metacritic_top()
+        await asyncio.sleep(3600*24)
         await steam_app_lib_getter(message)
 
 
@@ -67,6 +70,12 @@ async def title_search(message: types.Message):
     except IndexError:
         await bot.send_message(message.chat.id, 'Nothing found', parse_mode='HTML')
 
+
+@dp.message_handler(commands=['random', 'rand', 'r'])
+async def rand_game(message :types.Message):
+    choice = random.choice(metacritic_top)
+    answer = "Have you tried {}? Critics rate it {}/100, and gamers rate it {}/100, that's a lot!".format(*choice)
+    await bot.send_message(message.chat.id, answer, parse_mode='HTML')
 
 @dp.message_handler()
 async def echo(message: types.Message):
