@@ -43,7 +43,61 @@ def metacritic_parse (req_text):
     return res
 
 
-async def metacritic(question):
+# <div class="metascore_w small game positive">96</div>
+# <span class="data textscore textscore_outstanding">9.1</span>
+
+# async def metacritic_top():
+def metacritic_top():
+    site_texts = list()
+    headers = {
+        "authority": "www.metacritic.com",
+        "user-agent": "Mozilla / 5.0(Windows NT 10.0;Win64;x64)"
+    }
+    url = "https://www.metacritic.com/browse/games/score/metascore/all/pc/filtered"
+    for i in range(10):
+            if i == 0:
+                urll = url
+            else:
+                urll = url + '?page=' + str(i)
+            site_texts.append(requests.get(urll, headers=headers).text)
+        # async with aiohttp.ClientSession() as session:
+        #     if i == 0:
+        #         urll = url
+        #     else:
+        #         urll = url + '?page=' + str(i)
+        #     async with session.get(urll, headers=headers) as resp:
+        #         site_texts.append(await resp.text())
+    titles = list()
+    msrating = list()
+    ursrating = list()
+    for site in site_texts:
+        msratingsite = list(re.findall(r'(?<=<div class="metascore_w small game positive">)..', site))
+        userratingsite = list(re.findall(r'(?<=<span class="data textscore textscore_outstanding">)...', site))
+        trashtitles = list(
+            re.findall(r'class="basic_stat product_title"\S\n\s[ ]+[-/\w< ="]+>\n[ ]+[-\w: ]+(?=\n)', site))
+        titlessite = list()
+        for title in trashtitles:
+            q = title.split("\n")
+            q = q[-1].lstrip()
+            titlessite.append(q)
+        titles.extend(titlessite)
+        titlessite.clear()
+        msrating.extend(msratingsite)
+        msratingsite.clear()
+        ursrating.extend(userratingsite)
+        userratingsite.clear()
+        trashtitles.clear()
+    ms_usr = [first + " " + second for first, second in zip[msrating, ursrating]] # hz
+    top_games = dict(zip(titles, ms_usr))
+    from pprint import pprint
+    pprint(top_games)
+    return top_games
+
+
+    # return {"Divinity" : 'top'}
+
+
+async def metacritic_search(question):
     headers = {
         "authority": "www.metacritic.com",
         "user-agent": "Mozilla / 5.0(Windows NT 10.0;Win64;x64)"
@@ -57,13 +111,5 @@ async def metacritic(question):
             return answer
 
 if __name__ ==  "__main__":
-    title = 'Divinity'
-    url = "https://www.metacritic.com/search/game/{}/results?plats[3]=1&search_type=advanced".format(quote_plus(title))
-    headers = {
-        "authority": "www.metacritic.com",
-        "user-agent": "Mozilla / 5.0(Windows NT 10.0;Win64;x64)"
-    }
-    req = requests.get(url, headers=headers)
-    file = open(r'C:\Python tasks\ans.txt', 'w')
-    file.write(req.text)
-    image_getter(req.text)
+    metacritic_top()
+    pass
