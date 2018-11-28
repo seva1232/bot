@@ -13,7 +13,7 @@ def image_getter(req_text):
     return image
 
 
-def metacritic_parse (req_text):
+def metacritic_parse(req_text):
     trashtitles = list(re.findall(r'class="product_title basic_stat"\S\n\s[ ]+[-/\w< ="]+>\n[ ]+[-\w: ]+(?=\n)', req_text))
     titles = list()
     for title in trashtitles:
@@ -88,6 +88,7 @@ def metacritic_top():
         userratingsite.clear()
         trashtitles.clear()
     # ms_usr = [first + " " + second for first, second in zip[msrating, ursrating]] # hz
+    ursrating = list(map(lambda x: x.split('>')[-1], ursrating))
     top_games = list(map(list, (titles, msrating, ursrating)))
     from pprint import pprint
     pprint(top_games)
