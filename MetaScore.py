@@ -87,11 +87,11 @@ def metacritic_top():
         ursrating.extend(userratingsite)
         userratingsite.clear()
         trashtitles.clear()
-    ms_usr = [first + " " + second for first, second in zip[msrating, ursrating]] # hz
-    top_games = dict(zip(titles, ms_usr))
+    # ms_usr = [first + " " + second for first, second in zip[msrating, ursrating]] # hz
+    top_games = list(map(list, (titles, msrating, ursrating)))
     from pprint import pprint
     pprint(top_games)
-    return top_games
+    # return top_games
 
 
     # return {"Divinity" : 'top'}
