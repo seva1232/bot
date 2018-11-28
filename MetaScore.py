@@ -72,7 +72,7 @@ def metacritic_top():
     ursrating = list()
     for site in site_texts:
         msratingsite = list(re.findall(r'(?<=<div class="metascore_w small game positive">)..', site))
-        userratingsite = list(re.findall(r'(?<=<span class="data textscore textscore_outstanding">)...', site))
+        userratingsite = list(re.findall(r'(?<=<span class="data textscore textscore_)[\w]+">...', site))
         trashtitles = list(
             re.findall(r'class="basic_stat product_title"\S\n\s[ ]+[-/\w< ="]+>\n[ ]+[-\w: ]+(?=\n)', site))
         titlessite = list()
