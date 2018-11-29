@@ -67,14 +67,25 @@ async def title_search(message: types.Message):
         image_web = mgans.pop()
         descr = mgans.pop()
         answer = format_rating_answer(sgans, mgans)
+        image = None
+        genres = []
         await bot.send_message(message.chat.id, "<b>" + str(mgans[0][0]) + "</b> " + descr, parse_mode='HTML')
-        await bot.send_message(message.chat.id, image_web, parse_mode='HTML')
         await bot.send_message(message.chat.id, 'These may also interest you!', parse_mode='HTML')
         await bot.send_message(message.chat.id, answer, parse_mode='HTML')
         if steam_lib.get(mgans[0][0]) is not None:
+            image, genres = await steam.steam_get_game_info(str(steam_lib.get(mgans[0][0])))
             await bot.send_message(message.chat.id,
                                    'https://store.steampowered.com/app/{}'.format(
                                        urlp.quote_plus(str(steam_lib.get(mgans[0][0])))))
+        if image is not None:
+            await bot.send_message(message.chat.id, "Genres: {}.".format(', '.join(genres)))
+            await bot.send_message(message.chat.id, image, parse_mode='HTML')
+        else:
+            await bot.send_message(message.chat.id, image_web, parse_mode='HTML')
+
+
+
+
     except IndexError:
         await bot.send_message(message.chat.id, 'Nothing found', parse_mode='HTML')
 
