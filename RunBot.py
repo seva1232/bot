@@ -102,7 +102,7 @@ async def rand_game(message: types.Message):
 
 @dp.message_handler()
 async def echo(message: types.Message):
-    await bot.send_message(message.chat.id, "<b>Me no speak amerikano, try using commands </b>", parse_mode='HTML')
+    await bot.send_message(message.chat.id, "<b>Me no speak amerikano, try using commands </b>, maybe you meant\n <b>/s {}</b>".format(message.text), parse_mode='HTML')
 
 
 if __name__ == '__main__':
