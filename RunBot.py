@@ -61,6 +61,10 @@ async def send_welcome(message: types.Message):
 @dp.message_handler(commands=['s'])
 async def title_search(message: types.Message):
     question = message.text[(len("/s")):]
+    if question == "":
+        await bot.send_message(message.chat.id,
+                               "If you can't decide what are you going to look for, you should try my /r command!")
+        return
     try:
         sgans = await StopGame.stop_game(question)
         mgans = await MetaScore.metacritic_search(question)
@@ -83,9 +87,6 @@ async def title_search(message: types.Message):
         else:
             await bot.send_message(message.chat.id, image_web, parse_mode='HTML')
 
-
-
-
     except IndexError:
         await bot.send_message(message.chat.id, 'Nothing found', parse_mode='HTML')
 
@@ -94,7 +95,7 @@ async def title_search(message: types.Message):
 async def rand_game(message: types.Message):
     choice = random.choice(metacritic_top)
     answer = "<i>Have you tried </i><b>{}</b><i>? Critics rate it </i><b>{}</b><i>/100," \
-             " and gamers rate it </i><b>{}</b><i>/100, that's a lot!</i>"\
+             " and gamers rate it </i><b>{}</b><i>/100, that's a lot!</i>" \
         .format(*choice)
     await bot.send_message(message.chat.id, answer, parse_mode='HTML')
 
