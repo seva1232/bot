@@ -6,7 +6,7 @@ import asyncio
 import urllib.parse as urlp
 import random
 import os
-import translator
+from translator import yandex_translate_question
 
 from aiogram import Bot, Dispatcher, executor, types
 
@@ -24,7 +24,7 @@ metacritic_top = list()
 
 @dp.message_handler(commands=['translate'])
 async def translator(message: types.Message):
-    trans = await translator.yandex_translate_question("привет мир", YANDEX_TOKEN)
+    trans = await yandex_translate_question("привет мир", YANDEX_TOKEN)
     await bot.send_message(message.chat.id, str(trans), parse_mode='HTML')
 
 
