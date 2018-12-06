@@ -18,6 +18,7 @@ bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 steam_lib = dict()
 metacritic_top = list()
+testing = False
 
 
 
@@ -26,6 +27,8 @@ metacritic_top = list()
 async def translator(message: types.Message):
     trans = await yandex_translate_question("привет мир", YANDEX_TOKEN)
     await bot.send_message(message.chat.id, str(trans), parse_mode='HTML')
+    global testing
+    testing = not testing
 
 
 @dp.message_handler(commands=['refresh'])
@@ -76,7 +79,8 @@ async def title_search(message: types.Message):
                                "If you can't decide what are you going to look for, you should try my /r command!")
         return
     try:
-        question = (await yandex_translate_question(question, YANDEX_TOKEN))['text'][0]
+        if testing:
+            question = (await yandex_translate_question(question, YANDEX_TOKEN))['text'][0]
         sgans = await StopGame.stop_game(question)
         mgans = await MetaScore.metacritic_search(question)
         image_web = mgans.pop()
