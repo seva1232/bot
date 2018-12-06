@@ -6,7 +6,7 @@ async def yandex_translate_question(question: str, TOKEN: str):
     TRANSLATOR_API = "https://translate.yandex.net/api/v1.5/tr.json/translate"
     params = {
         'key': TOKEN,
-        "lang": 'eng',
+        "lang": 'en',
         'text': question,
         'format': 'plain'
     }
