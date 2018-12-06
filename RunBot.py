@@ -6,10 +6,12 @@ import asyncio
 import urllib.parse as urlp
 import random
 import os
+import translator
 
 from aiogram import Bot, Dispatcher, executor, types
 
 API_TOKEN = os.environ['API']
+YANDEX_TOKEN = os.environ['YANDEX_TOKEN']
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
@@ -17,6 +19,13 @@ dp = Dispatcher(bot)
 steam_lib = dict()
 metacritic_top = list()
 
+
+
+
+@dp.message_handler(commands=['translate'])
+async def translator(message: types.Message):
+    trans = translator.yandex_translate_question(message.text, YANDEX_TOKEN)
+    await bot.send_message(message.chat.id, trans, parse_mode='HTML')
 
 @dp.message_handler(commands=['refresh'])
 async def steam_app_lib_getter(message: types.Message):
