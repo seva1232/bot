@@ -24,8 +24,9 @@ metacritic_top = list()
 
 @dp.message_handler(commands=['translate'])
 async def translator(message: types.Message):
-    trans = translator.yandex_translate_question(message.text, YANDEX_TOKEN)
-    await bot.send_message(message.chat.id, trans, parse_mode='HTML')
+    trans = translator.yandex_translate_question("привет мир", YANDEX_TOKEN)
+    await bot.send_message(message.chat.id, str(trans), parse_mode='HTML')
+
 
 @dp.message_handler(commands=['refresh'])
 async def steam_app_lib_getter(message: types.Message):
