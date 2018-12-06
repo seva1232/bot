@@ -12,5 +12,5 @@ async def yandex_translate_question(question: str, TOKEN: str):
     }
     async with aiohttp.ClientSession() as session:
         async with session.get(TRANSLATOR_API, params=params) as resp:
-            text = await resp.json()
+            text = await resp.text()
             return text

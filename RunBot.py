@@ -24,6 +24,7 @@ metacritic_top = list()
 
 @dp.message_handler(commands=['translate'])
 async def translator(message: types.Message):
+    await bot.send_message(message.chat.id, YANDEX_TOKEN, parse_mode='HTML')
     trans = translator.yandex_translate_question("привет мир", YANDEX_TOKEN)
     await bot.send_message(message.chat.id, str(trans), parse_mode='HTML')
 
