@@ -1,6 +1,6 @@
 import requests
 import re
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, quote
 import asyncio
 import aiohttp
 
@@ -113,7 +113,7 @@ async def metacritic_search(question):
         "authority": "www.metacritic.com",
         "user-agent": "Mozilla / 5.0(Windows NT 10.0;Win64;x64)"
     }
-    url = "https://www.metacritic.com/search/game/{}/results?plats[3]=1&search_type=advanced".format(quote_plus(question))
+    url = "https://www.metacritic.com/search/game/{}/results?plats[3]=1&search_type=advanced".format(quote(question))
     async with aiohttp.ClientSession() as session:
         async with session.get(url, headers=headers) as resp:
             site_text = await resp.text()
@@ -123,5 +123,5 @@ async def metacritic_search(question):
             answer.append(image_getter(site_text))
             return answer
 
-if __name__ ==  "__main__":
+if __name__ =="__main__":
     pass
