@@ -5,6 +5,11 @@ import asyncio
 import aiohttp
 
 
+class MetaError(Exception):
+    def __init__(self, code):
+        self.code = code
+
+
 def image_getter(req_text):
     image = (list(re.findall(r'(?<=<div class="result_thumbnail">\n)[ ]+<img src="[-\d\w:./]+', req_text)))[0]
     image = image.lstrip()
@@ -67,6 +72,8 @@ async def metacritic_top():
                 urll = url + '?page=' + str(i)
             async with session.get(urll, headers=headers) as resp:
                 site_texts.append(await resp.text())
+                if resp.status != 200:
+                    raise MetaError(resp.status)
     titles = list()
     msrating = list()
     ursrating = list()
@@ -110,6 +117,8 @@ async def metacritic_search(question):
     async with aiohttp.ClientSession() as session:
         async with session.get(url, headers=headers) as resp:
             site_text = await resp.text()
+            if resp.status != 200:
+                raise MetaError
             answer = metacritic_parse(site_text)
             answer.append(image_getter(site_text))
             return answer

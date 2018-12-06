@@ -6,6 +6,11 @@ import asyncio
 import aiohttp
 
 
+class StopError(Exception):
+    def __init__(self, code):
+        self.code = code
+
+
 def formater_of_sg(dictionary, key):
     if key in dictionary.keys():
         return ", " + str(dictionary.get(key)) + ' <i>SGame</i>'
@@ -28,6 +33,8 @@ async def stop_game(question):
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as resp:
             site_text = await resp.text()
+            if resp.status != 200:
+                raise StopError(resp.status)
             answer = stop_game_request_parse(site_text)
             return answer
 

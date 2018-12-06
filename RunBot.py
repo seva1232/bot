@@ -7,6 +7,7 @@ import urllib.parse as urlp
 import random
 import os
 from translator import yandex_translate_question
+import translator
 
 from aiogram import Bot, Dispatcher, executor, types
 
@@ -78,9 +79,9 @@ async def title_search(message: types.Message):
         await bot.send_message(message.chat.id,
                                "If you can't decide what are you going to look for, you should try my /r command!")
         return
+    if testing:
+        question = (await yandex_translate_question(question, YANDEX_TOKEN))
     try:
-        if testing:
-            question = (await yandex_translate_question(question, YANDEX_TOKEN))['text'][0]
         sgans = await StopGame.stop_game(question)
         mgans = await MetaScore.metacritic_search(question)
         image_web = mgans.pop()
@@ -101,7 +102,10 @@ async def title_search(message: types.Message):
             await bot.send_message(message.chat.id, image, parse_mode='HTML')
         else:
             await bot.send_message(message.chat.id, image_web, parse_mode='HTML')
-
+    except StopGame.StopError as err:
+        await bot.send_message(message.chat.id, 'Somethind went wrong, got {} from stopgame'.format(err.code))
+    except MetaScore.MetaError as err:
+        await bot.send_message(message.chat.id, 'Somethind went wrong, got {} from metacritic'.format(err.code))
     except IndexError:
         await bot.send_message(message.chat.id, 'Nothing found', parse_mode='HTML')
 
