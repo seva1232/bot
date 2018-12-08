@@ -7,6 +7,7 @@ import urllib.parse as urlp
 import random
 import os
 from translator import yandex_translate_question
+from duckduckgo import ddg_search
 import translator
 
 from aiogram import Bot, Dispatcher, executor, types
@@ -81,6 +82,7 @@ async def title_search(message: types.Message):
         return
     if testing:
         question = (await yandex_translate_question(question, YANDEX_TOKEN))
+    ddc_link = await ddg_search(question)
     try:
         sgans = await StopGame.stop_game(question)
         mgans = await MetaScore.metacritic_search(question)
@@ -97,6 +99,8 @@ async def title_search(message: types.Message):
             await bot.send_message(message.chat.id,
                                    'https://store.steampowered.com/app/{}'.format(
                                        urlp.quote_plus(str(steam_lib.get(mgans[0][0])))))
+        else:
+            await bot.send_message(message.chat.id, ddc_link, parse_mode="HTML")
         if image is not None:
             await bot.send_message(message.chat.id, "Genres: {}.".format(', '.join(genres)))
             await bot.send_message(message.chat.id, image, parse_mode='HTML')
