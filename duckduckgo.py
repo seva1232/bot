@@ -24,7 +24,7 @@ async def ddg_search(question):
 if __name__ == "__main__":
     from requests import get
     question = input(":>")
-    url = 'https://duckduckgo.com/html?q={}'.format(quote_plus(question + " play game "))
+    url = 'https://duckduckgo.com/html?q={}'.format(quote_plus(question + " play game site"))
     req = get(url=url)
     with open("../text.html", "w") as file:
         file.write(req.text)

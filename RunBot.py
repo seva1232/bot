@@ -78,7 +78,7 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler(commands=['s'])
 async def title_search(message: types.Message):
-    question = message.text[(len("/s")):]
+    question = message.text[(len("/s")):-1]
     if question == "":
         await bot.send_message(message.chat.id,
                                "If you can't decide what are you going to look for, you should try my /r command!")
