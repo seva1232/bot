@@ -25,8 +25,11 @@ testing = False
 
 
 
-@dp.message_handler(commands=['translate_test'])
+@dp.message_handler(commands=['switch'])
 async def translator(message: types.Message):
+    if message.from_user.id != 196832767:
+        await bot.send_message(message.chat.id, 'Nope, you are not allowed here')
+        return
     trans = await yandex_translate_question("привет мир", YANDEX_TOKEN)
     await bot.send_message(message.chat.id, str(trans), parse_mode='HTML')
     global testing
