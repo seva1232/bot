@@ -42,10 +42,12 @@ async def steam_app_lib_getter(message: types.Message):
         await bot.send_message(message.chat.id, 'Nope, you are not allowed here')
         return
     else:
+
         global steam_lib
         global metacritic_top
         steam_lib = await steam.get_steam_lib()
         metacritic_top = await MetaScore.metacritic_top()
+        await bot.send_message(message.chat.id, "Refreshed, steam has {}, metatop has {}".format(len(steam_lib), len(metacritic_top)))
         await asyncio.sleep(3600 * 24)
         await steam_app_lib_getter(message)
 
