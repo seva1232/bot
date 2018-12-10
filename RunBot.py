@@ -6,6 +6,7 @@ import asyncio
 import urllib.parse as urlp
 import random
 import os
+import json
 from translator import yandex_translate_question
 from duckduckgo import ddg_search
 import translator
@@ -18,8 +19,10 @@ YANDEX_TOKEN = os.environ['YANDEX_TOKEN']
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
-steam_lib = dict()
-metacritic_top = list()
+with open("steamlib.txt", "r") as file:
+    steam_lib = json.load(file)
+with open("top.txt", "r") as file:
+    metacritic_top = json.load(file)
 testing = False
 
 
@@ -47,6 +50,10 @@ async def steam_app_lib_getter(message: types.Message):
         global metacritic_top
         steam_lib = await steam.get_steam_lib()
         metacritic_top = await MetaScore.metacritic_top()
+        with open("steamlib.txt", "w") as file:
+            json.dump(steam_lib, file)
+        with open("top.txt", "w") as file:
+            json.dump(metacritic_top, file)
         await bot.send_message(message.chat.id, "Refreshed, steam has {}, metatop has {}".format(len(steam_lib), len(metacritic_top)))
         await asyncio.sleep(3600 * 24)
         await steam_app_lib_getter(message)
