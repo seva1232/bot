@@ -126,6 +126,8 @@ async def title_search(message: types.Message):
         await bot.send_message(message.chat.id, 'Somethind went wrong, got {} from metacritic'.format(err.code))
     except IndexError:
         await bot.send_message(message.chat.id, 'Nothing found', parse_mode='HTML')
+    except Exception:
+        await bot.send_message(message.chat.id, 'Nothing found, try again later', parse_mode='HTML')
 
 
 @dp.message_handler(commands=['random', 'rand', 'r'])
