@@ -48,12 +48,14 @@ async def steam_app_lib_getter(message: types.Message):
 
         global steam_lib
         global metacritic_top
-        steam_lib = await steam.get_steam_lib()
-        metacritic_top = await MetaScore.metacritic_top()
-        with open("steamlib.txt", "w") as file:
-            json.dump(steam_lib, file)
-        with open("top.txt", "w") as file:
-            json.dump(metacritic_top, file)
+        try:
+            steam_lib = await steam.get_steam_lib()
+        except Exception:
+            print("mc")
+        try:
+            metacritic_top = await MetaScore.metacritic_top()
+        except Exception:
+            print("mcmc")
         await bot.send_message(message.chat.id, "Refreshed, steam has {}, metatop has {}".format(len(steam_lib), len(metacritic_top)))
         await asyncio.sleep(3600 * 24)
         await steam_app_lib_getter(message)
@@ -87,7 +89,7 @@ async def send_welcome(message: types.Message):
 
 @dp.message_handler(commands=['s'])
 async def title_search(message: types.Message):
-    question = message.text[(len("/s")):-1]
+    question = message.text[(len("/s")):]
     if question == "":
         await bot.send_message(message.chat.id,
                                "If you can't decide what are you going to look for, you should try my /r command!")
